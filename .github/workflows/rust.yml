@@ -17,7 +17,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build
         run: cargo build --verbose
+      - name: Run tests without default features
+        run: cargo test --no-default-features
       - name: Run tests strict
         run: cargo test --no-default-features -F mtk,strict
       - name: Run tests non strict
         run: cargo test --no-default-features -F mtk
+      - name: Run tests with default features
+        run: cargo test
