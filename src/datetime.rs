@@ -6,7 +6,7 @@ pub struct Date {
     pub day: u8,
     /// NMEA month
     pub month: u8,
-    /// Absolute year calculated from NMEA two-digit year, so for 19 it should be 2019, for 70 it should be 1970
+    /// Absolute year (from 19xx to 20xx) calculated from NMEA two-digit year, so for 19 it should be 2019, for 70 it should be 1970
     pub year: u16,
 }
 

@@ -445,18 +445,20 @@ fn test_correct_zda() {
                 panic!("Unexpected ParseResult variant while parsing GSA data.");
             }
         };
-        assert_eq!(zda.source, Source::GNSS);
-        assert_eq!(
-            zda.time,
-            datetime::Time {
+        let expected_datetime = datetime::DateTime {
+            date: datetime::Date {
+                day: 12,
+                month: 9,
+                year: 2018,
+            },
+            time: datetime::Time {
                 hours: 18,
                 minutes: 16,
-                seconds: 04.456
-            }
-        );
-        assert_eq!(zda.day, 12);
-        assert_eq!(zda.month, 9);
-        assert_eq!(zda.year, 2018);
+                seconds: 04.456,
+            },
+        };
+        assert_eq!(zda.source, Source::GNSS);
+        assert_eq!(zda.datetime, expected_datetime);
         assert_eq!(zda.offset_hours, Some(-1));
         assert_eq!(zda.offset_minutes, Some(15));
     }
@@ -474,18 +476,20 @@ fn test_correct_zda_2() {
                 panic!("Unexpected ParseResult variant while parsing GSA data.");
             }
         };
-        assert_eq!(zda.source, Source::GNSS);
-        assert_eq!(
-            zda.time,
-            datetime::Time {
+        let expected_datetime = datetime::DateTime {
+            date: datetime::Date {
+                day: 12,
+                month: 9,
+                year: 2018,
+            },
+            time: datetime::Time {
                 hours: 18,
                 minutes: 16,
-                seconds: 04.456
-            }
-        );
-        assert_eq!(zda.day, 12);
-        assert_eq!(zda.month, 9);
-        assert_eq!(zda.year, 2018);
+                seconds: 04.456,
+            },
+        };
+        assert_eq!(zda.source, Source::GNSS);
+        assert_eq!(zda.datetime, expected_datetime);
         assert_eq!(zda.offset_hours, None);
         assert_eq!(zda.offset_minutes, None);
     }
