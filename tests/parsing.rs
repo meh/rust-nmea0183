@@ -7,10 +7,12 @@ use nmea0183::datetime;
 use nmea0183::satellite;
 use nmea0183::FixType;
 use nmea0183::GPSQuality;
+#[cfg(feature = "mtk")]
 use nmea0183::JammingStatus;
 use nmea0183::Mode;
 use nmea0183::GGA;
 use nmea0183::GLL;
+#[cfg(feature = "mtk")]
 use nmea0183::PMTKSPF;
 use nmea0183::RMC;
 use nmea0183::VTG;
@@ -391,7 +393,9 @@ fn test_correct_gsv2() {
         )
     }
 }
+
 #[test]
+#[cfg(feature = "mtk")]
 fn test_correct_pmtk() {
     let mut p = Parser::new();
     let b = b"$PMTKSPF,2*59\r\n";
