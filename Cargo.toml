@@ -12,11 +12,13 @@ categories = ["embedded", "no-std", "parser-implementations"]
 readme = "README.md"
 
 [dependencies]
+defmt = { version = "1", optional = true }
 
 [features]
 default = ["strict"]
 mtk = []
 strict = []
+defmt = ["dep:defmt"]
 
 [badges]
 codecov = { repository = "nsforth/nmea0183" }

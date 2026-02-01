@@ -4,6 +4,7 @@ use crate::Source;
 
 /// The actual course and speed relative to the ground.
 #[derive(Debug, PartialEq, Clone, Copy)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct VTG {
     /// Navigational system.
     pub source: Source,

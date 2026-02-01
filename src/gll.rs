@@ -5,6 +5,7 @@ use crate::Source;
 
 /// Geographic latitude ang longitude sentence with time of fix and receiver state.
 #[derive(Debug, PartialEq, Clone, Copy)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct GLL {
     /// Navigational system.
     pub source: Source,
