@@ -341,7 +341,7 @@ impl Course {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct MagneticCourse {
     /// Course in degrees from Magnetic North Pole rotated clockwise.
-    degrees: f32,
+    pub degrees: f32,
 }
 
 impl From<f32> for MagneticCourse {
