@@ -1,6 +1,6 @@
 //! NMEA date and time structures.
 /// NMEA date
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub struct Date {
     /// NMEA day
     pub day: u8,
@@ -47,7 +47,7 @@ impl Date {
 }
 
 /// NMEA time in UTC
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub struct Time {
     /// Hours as reported by receiver
     pub hours: u8,
@@ -100,7 +100,8 @@ impl Time {
 }
 
 /// NMEA date and time in UTC
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Copy)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct DateTime {
     /// NMEA date
     pub date: Date,

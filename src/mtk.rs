@@ -2,7 +2,7 @@ use crate::Source;
 use core::convert::TryFrom;
 
 /// MTK NMEA packet type
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub enum MTKPacketType {
     /// Related to Spoofing and Jamming detection
     SPF,
@@ -20,7 +20,7 @@ impl TryFrom<&str> for MTKPacketType {
 }
 
 /// Related to Spoofing and Jamming detection .
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Copy, Clone)]
 pub struct PMTKSPF {
     /// Navigational system.
     pub source: Source,
@@ -46,7 +46,7 @@ impl PMTKSPF {
 }
 
 /// Status of gps Jamming
-#[derive(Debug, PartialEq, Clone,Copy)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub enum JammingStatus {
     /// No Jamming
     Healthy,

@@ -1,4 +1,4 @@
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub(crate) enum Status {
     Valid,
     NotValid,
@@ -15,7 +15,7 @@ impl Status {
 }
 
 /// Receiver mode of operation.
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub enum Mode {
     /// Autonomous mode without any external correction.
     Autonomous,

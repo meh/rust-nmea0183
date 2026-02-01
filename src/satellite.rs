@@ -3,7 +3,7 @@
 use crate::common;
 
 ///Information about satellite in view.
-#[derive(Debug, PartialEq, Clone, Default)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy, Default)]
 pub struct Satellite {
     /// Satellite pseudo-random noise number.
     pub prn: u16,

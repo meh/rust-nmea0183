@@ -3,7 +3,7 @@ use crate::modes::Mode;
 use crate::Source;
 
 /// The actual course and speed relative to the ground.
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub struct VTG {
     /// Navigational system.
     pub source: Source,

@@ -115,7 +115,7 @@ pub use vtg::VTG;
 pub use zda::ZDA;
 
 /// Source of NMEA sentence like GPS, GLONASS or other.
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum Source {
     /// USA Global Positioning System
     GPS = 0b1,
@@ -133,6 +133,7 @@ pub enum Source {
 }
 
 /// Mask for Source filter in Parser.
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub struct SourceMask {
     mask: u32,
 }
@@ -187,7 +188,7 @@ impl TryFrom<&str> for Source {
 }
 
 /// Various kinds of NMEA sentence like RMC, VTG or other. Used for filter by sentence type in Parser.
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Eq, PartialEq, Copy, Clone)]
 pub enum Sentence {
     /// Recommended minimum sentence.
     RMC = 0b1,
@@ -229,6 +230,7 @@ impl TryFrom<&str> for Sentence {
 }
 
 /// Mask for Sentence filter in Parser.
+#[derive(Debug, Eq, PartialEq, Copy, Clone)]
 pub struct SentenceMask {
     mask: u32,
 }
@@ -268,7 +270,7 @@ impl BitOr<Sentence> for SentenceMask {
 /// The NMEA sentence parsing result.
 /// Sentences with many null fields or sentences without valid data is also parsed and returned as None.
 /// None ParseResult may be interpreted as working receiver but without valid data.
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Copy, Clone)]
 pub enum ParseResult {
     /// The Recommended Minimum Sentence for any GNSS. Typically most used.
     RMC(Option<RMC>),
@@ -299,6 +301,7 @@ pub const MAX_SENTENCE_LENGTH: usize = 120usize;
 
 /// Parses NMEA sentences and stores intermediate parsing state.
 /// Parser is tolerant for errors so you should not reinitialize it after errors.
+#[derive(Debug, Copy, Clone)]
 pub struct Parser {
     buffer: [u8; MAX_SENTENCE_LENGTH],
     buflen: usize,
@@ -309,7 +312,7 @@ pub struct Parser {
     sentence_mask: SentenceMask,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
 enum ParserState {
     WaitStart,
     ReadUntilChkSum,
@@ -319,6 +322,7 @@ enum ParserState {
     WaitLF,
 }
 
+#[derive(Debug)]
 struct ParserIterator<'a> {
     parser: &'a mut Parser,
     input: Iter<'a, u8>,

@@ -3,7 +3,7 @@ use crate::satellite::Satellite;
 use crate::Source;
 const MAX_SATELLITES_PER_MESSAGE: usize = 4;
 /// Satellites in views including the number of SVs in view, the PRN numbers, elevations, azimuths, and SNR values.
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub struct GSV {
     /// Navigational system.
     pub source: Source,
