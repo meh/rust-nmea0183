@@ -96,6 +96,8 @@ pub(crate) mod mtk;
 pub(crate) mod rmc;
 pub(crate) mod vtg;
 pub(crate) mod zda;
+#[cfg(feature = "txt")]
+pub(crate) mod txt;
 
 pub use gga::GPSQuality;
 pub use gga::GGA;
@@ -113,6 +115,8 @@ pub use mtk::PMTKSPF;
 pub use rmc::RMC;
 pub use vtg::VTG;
 pub use zda::ZDA;
+#[cfg(feature = "txt")]
+pub use txt::{TXT, MessageType};
 
 /// Source of NMEA sentence like GPS, GLONASS or other.
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
@@ -128,9 +132,11 @@ pub enum Source {
     Beidou = 0b1000,
     /// Global Navigation Sattelite System. Some combination of other systems. Depends on receiver model, receiver settings, etc..
     GNSS = 0b10000,
+    /// Quasi-Zenith Satellite System
+    QZSS = 0b100000,
     #[cfg(feature = "mtk")]
     /// MediaTek NMEA packet protocol
-    MTK = 0b100000,
+    MTK = 0b1000000,
 }
 
 /// Mask for Source filter in Parser.
@@ -182,9 +188,14 @@ impl TryFrom<&str> for Source {
             "GA" => Ok(Source::Gallileo),
             "BD" => Ok(Source::Beidou),
             "GN" => Ok(Source::GNSS),
+            "GQ" => Ok(Source::QZSS),
             #[cfg(feature = "mtk")]
             "PM" => Ok(Source::MTK),
-            _ => Err("Source is not supported!"),
+            source => {
+                #[cfg(feature = "defmt")]
+                defmt::error!("Source is not supported: {}", source);
+                Err("Source is not supported!")
+            }
         }
     }
 }
@@ -210,6 +221,9 @@ pub enum Sentence {
     GSA = 0b1000000,
     /// Current Date and Time.
     ZDA = 0b10000000,
+    #[cfg(feature = "txt")]
+    /// Text message from receiver.
+    TXT = 0b100000000,
 }
 
 impl TryFrom<&str> for Sentence {
@@ -226,8 +240,14 @@ impl TryFrom<&str> for Sentence {
             "PMTK" => Ok(Sentence::PMTK),
             "GSA" => Ok(Sentence::GSA),
             "ZDA" => Ok(Sentence::ZDA),
+            #[cfg(feature = "txt")]
+            "TXT" => Ok(Sentence::TXT),
 
-            _ => Err("Unsupported sentence type."),
+            sentence => {
+                #[cfg(feature = "defmt")]
+                defmt::error!("Unsupported NMEA sentence type: {}", sentence);
+                Err("Unsupported sentence type.")
+            }
         }
     }
 }
@@ -274,7 +294,7 @@ impl BitOr<Sentence> for SentenceMask {
 /// The NMEA sentence parsing result.
 /// Sentences with many null fields or sentences without valid data is also parsed and returned as None.
 /// None ParseResult may be interpreted as working receiver but without valid data.
-#[derive(Debug, PartialEq, Copy, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum ParseResult {
     /// The Recommended Minimum Sentence for any GNSS. Typically most used.
@@ -294,6 +314,9 @@ pub enum ParseResult {
     GSA(Option<GSA>),
     /// Current Date and Time.
     ZDA(Option<ZDA>),
+    #[cfg(feature = "txt")]
+    /// Text message from receiver.
+    TXT(Option<TXT>),
 }
 
 #[cfg(feature = "strict")]
@@ -484,6 +507,8 @@ impl Parser {
             Sentence::GSV => Ok(Some(ParseResult::GSV(GSV::parse(source, &mut iter)?))),
             Sentence::GSA => Ok(Some(ParseResult::GSA(GSA::parse(source, &mut iter)?))),
             Sentence::ZDA => Ok(Some(ParseResult::ZDA(ZDA::parse(source, &mut iter)?))),
+            #[cfg(feature = "txt")]
+            Sentence::TXT => Ok(Some(ParseResult::TXT(TXT::parse(source, &mut iter)?))),
 
             #[cfg(feature = "mtk")]
             Sentence::PMTK => {
